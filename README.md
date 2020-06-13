@@ -1,10 +1,10 @@
 # banquepostale_to_tsv
 
-La Banque Postale provides its e-accounting data in PDF, which has to
-be processed in order to become useful.
+La Banque Postale provides its bank statements data in PDF, which has
+to be processed in order to become useful.
 
 This project started as fixes for
-[https://github.com/wizmer/banquepostale-pdf-to-csv](`banquepostale_to_csv`),
+[`banquepostale_to_csv`](https://github.com/wizmer/banquepostale-pdf-to-csv),
 but eventually became a full rewrite, hence the separate name to
 facilitate fixes in either branch.
 
