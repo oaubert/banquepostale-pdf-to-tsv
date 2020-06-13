@@ -19,3 +19,15 @@ The application outputs records as text, one per line. The record data
 is tab-separated, so it can be redirected to a .tsv file and imported
 in any spreadsheet application. You can also use `grep` on its output
 (to filter against account number for instance).
+
+# License
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or (at
+your option) any later version.
+
+# Author
+
+Olivier Aubert <contact@olivieraubert.net>
+
