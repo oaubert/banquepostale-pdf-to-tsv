@@ -50,7 +50,7 @@ def data_lines(lines):
     reference_line = None
 
     for l in lines:
-        if re.search('^\s*Date\s+Opérations.+Débit.+Crédit', l):
+        if re.search('^\s*Date\s+Opération.+Débit.+Crédit', l):
             reference_line = l
             continue
 
@@ -89,7 +89,9 @@ def data_lines(lines):
             else:
                 m = re.search('^\s*(?P<day>\d{2})/(?P<month>\d{2})\s+(?P<title>.+?)\s+(?P<value>\d{,3}(?: \d{3})*(?:,\d+)?)\s*$', l)
                 amount = float(m.group('value').replace(" ", "").replace(",", "."))
-                if len(l) < len(reference_line) - 12:
+                if reference_line is None:
+                    logger.error(f"Did not find reference line before\n{l}")
+                elif len(l) < len(reference_line) - 12:
                     amount = -amount
 
             date = f"{m.group('month')}/{m.group('day')}"
