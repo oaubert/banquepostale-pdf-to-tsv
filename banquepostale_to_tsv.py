@@ -93,7 +93,7 @@ def data_lines(lines):
                     amount = -amount
 
             date = f"{m.group('month')}/{m.group('day')}"
-            title = m.group('title')
+            title = m.group('title').strip()
             year = publication_date[0]
             if date[:2] == "12" and publication_date[1] == 1:
                 year = year - 1
@@ -124,7 +124,7 @@ def data_lines(lines):
             current_record = None
 
         if current_record is not None:
-            current_record.details = " ".join((current_record.details, l))
+            current_record.details = " / ".join((current_record.details, l.strip()))
 
     if current_record is not None:
         yield current_record
