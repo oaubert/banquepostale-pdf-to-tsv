@@ -54,7 +54,7 @@ def data_lines(lines):
             reference_line = l
             continue
 
-        m = re.search(r'Relevé\s+édité\s+le\s+(?P<day>\d\d)\s+(?P<month>\w+)\s+(?P<year>\d\d\d\d)', l)
+        m = re.search(r'Relevé\s+édité\s+le\s+(?P<day>\d\d?)\s+(?P<month>\w+)\s+(?P<year>\d\d\d\d)', l)
         if m:
             # In this order so that we can compare date tuples
             publication_date = ( int(m.group('year')),
