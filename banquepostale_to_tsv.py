@@ -83,7 +83,7 @@ def data_lines(lines):
             if publication_date < (2017, 3, 1):
                 # Before 1st march 2017, there is an extra column with the price in
                 # francs
-                m = re.match(r'\s*(?P<day>\d{2})\/(?P<month>\d{2})(?P<title>.*?)(?P<value>\d{,3}(?: \d{3})*(,\d+)?)\s+(?P<francs>(?:-|\+ )\d{,3}(?: \d{3})*(?:,\d+)?)\s*$', l)
+                m = re.match(r'\s*(?P<day>\d{2})\/(?P<month>\d{2})(?P<title>.*?)(?P<value>\d{,3}(?: \d{3})*(,\d+)?)\s+(?P<francs>(?:- |\+ )\d{,3}(?: \d{3})*(?:,\d+)?)\s*$', l)
                 value = float(m.group('value').replace(' ', '').replace(',', '.'))
                 value = -value if m.group('francs')[0] == '-' else value
             else:
