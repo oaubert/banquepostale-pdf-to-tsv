@@ -119,15 +119,12 @@ def data_lines(lines):
             yield Record(title='Débit total', details='Débit total', amount=credit, account=current_account)
             current_record = None
 
-        m = re.search('^\s*Total des opérations\s+(\d+(,\d+)?)$', l)
+        m = re.search('^\s*Total des opérations\s+(?P<credit>\d+(,\d+)?)$', l)
         if m:
             if current_record is not None:
                 yield current_record
-            amount = float(m.group(1).replace(",", "."))
-            if amount >= 0:
-                title = "Crédit total"
-            else:
-                title = "Débit total"
+            amount = float(m.group('credit').replace(",", "."))
+            title = "Crédit total"
             yield Record(title=title, details=title, amount=amount, account=current_account)
             current_record = None
 
