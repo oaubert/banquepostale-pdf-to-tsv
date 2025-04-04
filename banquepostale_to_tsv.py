@@ -50,7 +50,7 @@ def data_lines(lines):
     reference_line = None
 
     for l in lines:
-        if re.search('^\s*Date\s+Opération.+Débit.+Crédit', l):
+        if re.search(r'^\s*Date\s+Opération.+Débit.+Crédit', l):
             reference_line = l
             continue
 
@@ -62,12 +62,12 @@ def data_lines(lines):
                                  int(m.group('day')) )
             continue
 
-        m = re.search('.+n°\s+(?P<account>[\w\d ]+)\s*', l)
+        m = re.search(r'.+n°\s+(?P<account>[\w\d ]+)\s*', l)
         if m:
             current_account = m.group('account').replace(' ', '')
             continue
 
-        m = re.search('^\s+(?P<label>(Ancien|Nouveau)\s+solde)\s+au\s+(?P<date>\d{2}/\d{2}/\d{4})\s+(?P<value>\d{,3}(?: \d{3})*(?:,\d+)?)\s*$', l)
+        m = re.search(r'^\s+(?P<label>(Ancien|Nouveau)\s+solde)\s+au\s+(?P<date>\d{2}/\d{2}/\d{4})\s+(?P<value>\d{,3}(?: \d{3})*(?:,\d+)?)\s*$', l)
         if m:
             if current_record is not None:
                 yield current_record
@@ -79,15 +79,15 @@ def data_lines(lines):
             current_record = None
             continue
 
-        if re.search('^\s{,2}(?P<date>\d{2}/\d{2})\s', l):
+        if re.search(r'^\s{,3}(?P<date>\d{2}/\d{2})\s', l):
             if publication_date < (2017, 3, 1):
                 # Before 1st march 2017, there is an extra column with the price in
                 # francs
                 m = re.match(r'\s*(?P<day>\d{2})\/(?P<month>\d{2})(?P<title>.*?)(?P<value>\d{,3}(?: \d{3})*(,\d+)?)\s+(?P<francs>(?:- |\+ )\d{,3}(?: \d{3})*(?:,\d+)?)\s*$', l)
                 value = float(m.group('value').replace(' ', '').replace(',', '.'))
-                value = -value if m.group('francs')[0] == '-' else value
+                amount = -value if m.group('francs')[0] == '-' else value
             else:
-                m = re.search('^\s*(?P<day>\d{2})/(?P<month>\d{2})\s+(?P<title>.+?)\s+(?P<value>\d{,3}(?: \d{3})*(?:,\d+)?)\s*$', l)
+                m = re.search(r'^\s*(?P<day>\d{2})/(?P<month>\d{2})\s+(?P<title>.+?)\s+(?P<value>\d{,3}(?: \d{3})*(?:,\d+)?)\s*$', l)
                 amount = float(m.group('value').replace(" ", "").replace(",", "."))
                 if reference_line is None:
                     logger.error(f"Did not find reference line before\n{l}")
@@ -109,7 +109,7 @@ def data_lines(lines):
                                     account=current_account)
             continue
 
-        m = re.search('^\s*(?P<label>Total des opérations).+?(?P<debit>\d{,3}(?: \d{3})*(?:,\d+))\s+(?P<credit>\d{,3}(?: \d{3})*(?:,\d+)?)\s*$', l)
+        m = re.search(r'^\s*(?P<label>Total des opérations).+?(?P<debit>\d{,3}(?: \d{3})*(?:,\d+))\s+(?P<credit>\d{,3}(?: \d{3})*(?:,\d+)?)\s*$', l)
         if m:
             if current_record is not None:
                 yield current_record
@@ -119,7 +119,7 @@ def data_lines(lines):
             yield Record(title='Débit total', details='Débit total', amount=credit, account=current_account)
             current_record = None
 
-        m = re.search('^\s*Total des opérations\s+(?P<credit>\d+(,\d+)?)$', l)
+        m = re.search(r'^\s*Total des opérations\s+(?P<credit>\d+(,\d+)?)$', l)
         if m:
             if current_record is not None:
                 yield current_record
